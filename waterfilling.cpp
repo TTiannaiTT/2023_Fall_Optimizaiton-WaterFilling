@@ -2,35 +2,35 @@
 #include<random>
 using namespace std;
 
-//Î¬¶È
+//ç»´åº¦
 #define dimension 10
-//¾«¶È
+//ç²¾åº¦
 #define precision 1e-6
-//×Ü×¢Ë®Á¿
+//æ€»æ³¨æ°´é‡
 #define totalwater 1.0
 
 double alpha[dimension] = {0.39,0.09,0.53,0.73,0.73,0.1,0.85,0.6,0.15,0.1};
 double x[dimension] = {};
-//±¾ÊµÑéÖĞ£¬nuÊ¼ÖÕÎª1/nuĞÎÊ½£¬¹ÊÎª·½±ã±íÊ¾£¬nu[]Êı×éÖĞÊµ¼Ê´æ´¢1/nu
+//æœ¬å®éªŒä¸­ï¼Œnuå§‹ç»ˆä¸º1/nuå½¢å¼ï¼Œæ•…ä¸ºæ–¹ä¾¿è¡¨ç¤ºï¼Œnu[]æ•°ç»„ä¸­å®é™…å­˜å‚¨1/nu
 double nu[dimension] = {};
 
-//Éú³ÉÒ»×éËæ»úµÄalpha²ÎÊı£¬ÇÒai·¶Î§Îª(0,1)
+//ç”Ÿæˆä¸€ç»„éšæœºçš„alphaå‚æ•°ï¼Œä¸”aièŒƒå›´ä¸º(0,1)
 void random_alpha() {
 	random_device num;
-	uniform_real_distribution<double> Random(0, 1); //Ëæ»úÊı·Ö²¼¶ÔÏó 
-	for (int i = 0; i < dimension; i++)  //Éú³É·¶Î§Îª0-1µÄËæ»ú¸¡µãÊıĞòÁĞ 
+	uniform_real_distribution<double> Random(0, 1); //éšæœºæ•°åˆ†å¸ƒå¯¹è±¡ 
+	for (int i = 0; i < dimension; i++)  //ç”ŸæˆèŒƒå›´ä¸º0-1çš„éšæœºæµ®ç‚¹æ•°åºåˆ— 
 		alpha[i] = Random(num);
 }
 
-//¸ù¾İalpha½øĞĞ×¢Ë®,¸ù¾İx^*½âµÄĞÎÊ½£¬Ê¹×îÖÕµÄºÍÔÚ¾«¶ÈÒªÇóÏÂ½Ó½ü1
-//½Ó½üµÄËã·¨ÀàËÆ¶ş·Ö²éÕÒ£¬¾ßÌåÎ±´úÂëÔÚ±¨¸æ¢ô.B½ÚÖĞ
+//æ ¹æ®alphaè¿›è¡Œæ³¨æ°´,æ ¹æ®x^*è§£çš„å½¢å¼ï¼Œä½¿æœ€ç»ˆçš„å’Œåœ¨ç²¾åº¦è¦æ±‚ä¸‹æ¥è¿‘1
+//æ¥è¿‘çš„ç®—æ³•ç±»ä¼¼äºŒåˆ†æŸ¥æ‰¾ï¼Œå…·ä½“ä¼ªä»£ç åœ¨æŠ¥å‘Šâ…£.BèŠ‚ä¸­
 void waterfilling() {
 	double Init = 0.5;
 	double Min = 0.0;
 	double Max = totalwater + double(totalwater) / dimension;
 	double result = 0;
 
-	while (abs(result-totalwater)>precision){ //ÅĞ¶Ï×¢Ë®ºó½á¹ûÊÇ·ñÂú×ã¾«¶ÈÒªÇó
+	while (abs(result-totalwater)>precision){ //åˆ¤æ–­æ³¨æ°´åç»“æœæ˜¯å¦æ»¡è¶³ç²¾åº¦è¦æ±‚
 		fill(nu, nu + dimension, Init);
 		for (int i = 0; i < dimension; i++) {
 			x[i] = max(nu[i] - alpha[i], 0.0);
@@ -40,11 +40,11 @@ void waterfilling() {
 		for (auto& i : x)
 			result += i;
 
-		if (result > totalwater) {//¸üĞÂÉÏ½ç
+		if (result > totalwater) {//æ›´æ–°ä¸Šç•Œ
 			Max = Init;
 			Init = (Init + Min) / 2;
 		}
-		else if (result < totalwater) {//¸üĞÂÏÂ½ç
+		else if (result < totalwater) {//æ›´æ–°ä¸‹ç•Œ
 			Min = Init;
 			Init = (Init + Max) / 2;
 		}
@@ -60,18 +60,18 @@ int main() {
 	random_alpha();
 	waterfilling();
 
-	//Êä³ö±¾´ÎµÄalpha²ÎÊı
+	//è¾“å‡ºæœ¬æ¬¡çš„alphaå‚æ•°
 	for (int i = 0; i < dimension; i++) {
 		cout << "alpha[" << i << ']' << " = " << alpha[i] << endl;
 	}
 	cout << endl;
-	//Êä³öx^*µÄÓÅ»¯½á¹û
+	//è¾“å‡ºx^*çš„ä¼˜åŒ–ç»“æœ
 	cout << "The optimal x* is : " << endl;
 	for (int i = 0; i < dimension; i++) {
 		cout << "x[" << i << ']' << " = " << x[i] << endl;
 	}
 	cout << endl;
-	//Êä³ö¼ÆËãµÄ×îÓÅÖµ
+	//è¾“å‡ºè®¡ç®—çš„æœ€ä¼˜å€¼
 	double result = 0;
 	for (int i = 0; i < dimension; i++) {
 		result -= log(alpha[i] + x[i]);
